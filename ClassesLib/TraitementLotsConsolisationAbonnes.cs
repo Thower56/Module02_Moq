@@ -36,7 +36,6 @@ namespace ClassesLib
                     sansRetour = false;
                 }
             }
-
             if(sansRetour)
             {
                 m_depotDestination.ObtenirAbonnes()
@@ -44,7 +43,6 @@ namespace ClassesLib
                     .ToList()
                     .ForEach(d => m_depotDestination.DesactiverAbonne(d.m_AbonneId)); 
             }
-            
         }
     }
 }

@@ -2,7 +2,7 @@ namespace Tests;
 using Moq;
 using ClassesLib;
 
-public class UnitTest1
+public class TestConsoliderDonneesDestination
 {
     [Fact]
     public void TestLaConsolidationDesDonnees()
@@ -12,10 +12,12 @@ public class UnitTest1
         List<Abonne> mockList = new List<Abonne>();
 
         mockImport.Setup(i => i.ObtenirAbonnes()).Returns(mockList);
+        mockDepot.Setup(d => d.ObtenirAbonnes());
         TraitementLotsConsolidationAbonnes traitement = new TraitementLotsConsolidationAbonnes(mockImport.Object, mockDepot.Object);
         traitement.ConsoliderDonneesDestination();
 
         mockImport.Verify(i => i.ObtenirAbonnes(), Times.Once);
+        mockDepot.Verify(d => d.ObtenirAbonnes(), Times.Once);
         mockImport.VerifyNoOtherCalls();
     }
 
@@ -86,8 +88,8 @@ public class UnitTest1
         TraitementLotsConsolidationAbonnes traitement = new TraitementLotsConsolidationAbonnes(mockImpot.Object, mockDepot.Object);
         traitement.ConsoliderDonneesDestination();
 
-        mockImpot.Verify(i => i.ObtenirAbonnes(), Times.AtLeastOnce);
-        mockDepot.Verify(d => d.ObtenirAbonne(TestAbonne2.m_AbonneId), Times.AtLeastOnce);
+        mockImpot.Verify(i => i.ObtenirAbonnes(), Times.Once);
+        mockDepot.Verify(d => d.ObtenirAbonne(TestAbonne2.m_AbonneId), Times.Once);
         mockDepot.Verify(d => d.MettreAjourAbonne(TestAbonne), Times.Once);
         mockDepot.VerifyNoOtherCalls();
     }
