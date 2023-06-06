@@ -9,9 +9,8 @@ public class TestConsoliderDonneesDestination
     {
         Mock<IDepotImportationAbonnes> mockImport = new Mock<IDepotImportationAbonnes>();
         Mock<IDepotAbonnes> mockDepot = new Mock<IDepotAbonnes>();
-        List<Abonne> mockList = new List<Abonne>();
 
-        mockImport.Setup(i => i.ObtenirAbonnes()).Returns(mockList);
+        mockImport.Setup(i => i.ObtenirAbonnes());
         mockDepot.Setup(d => d.ObtenirAbonnes());
         TraitementLotsConsolidationAbonnes traitement = new TraitementLotsConsolidationAbonnes(mockImport.Object, mockDepot.Object);
         traitement.ConsoliderDonneesDestination();
