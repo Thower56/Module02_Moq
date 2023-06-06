@@ -16,7 +16,7 @@ namespace ClassesLib
             bool sansRetour = true;
             foreach(Abonne a in m_depotSource.ObtenirAbonnes())
             {
-                Abonne resultat = m_depotDestination.ObtenirAbonne(a.m_AbonneId);
+                Abonne resultat = m_depotDestination.ObtenirAbonne(a.AbonneId);
                 if(resultat != null)
                 {
                     if(!resultat.Equals(a))
@@ -41,7 +41,7 @@ namespace ClassesLib
                 m_depotDestination.ObtenirAbonnes()
                     .Where(d => !m_depotSource.ObtenirAbonnes().Contains(d))
                     .ToList()
-                    .ForEach(d => m_depotDestination.DesactiverAbonne(d.m_AbonneId)); 
+                    .ForEach(d => m_depotDestination.DesactiverAbonne(d.AbonneId)); 
             }
         }
     }
