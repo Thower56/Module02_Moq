@@ -29,7 +29,7 @@ namespace ClassesLib
                 {
                     m_depotDestination.AjouterAbonne(s);
                 }
-                if(destinationAbonne.ContainsKey(s.AbonneId))
+                else
                 {
                     if(!s.Equals(destinationAbonne[s.AbonneId]))
                     {
