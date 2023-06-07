@@ -44,7 +44,7 @@ public class Abonne
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(this.m_AbonneId, this.m_Nom, this.m_Prenom);
+        return HashCode.Combine(this.m_AbonneId, this.m_Nom, this.m_Prenom, this.m_Actif);
     }
 
     public override bool Equals(object? obj)

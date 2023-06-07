@@ -29,17 +29,16 @@ public class TestConsoliderDonneesDestination
         Abonne TestAbonne = new Abonne();
         List<Abonne> mockList = new List<Abonne>();
         List<Abonne> mockList2 = new List<Abonne>();
-       
         mockList.Add(TestAbonne);
-        mockImpot.Setup(i => i.ObtenirAbonnes()).Returns(mockList);
-        mockDepot.Setup(d => d.ObtenirAbonne(TestAbonne.AbonneId));
 
+        mockImpot.Setup(i => i.ObtenirAbonnes()).Returns(mockList);
+        mockDepot.Setup(d1 => d1.ObtenirAbonnes());
         TraitementLotsConsolidationAbonnes traitement = new TraitementLotsConsolidationAbonnes(mockImpot.Object, mockDepot.Object);
         traitement.ConsoliderDonneesDestination();
 
         mockImpot.Verify(i => i.ObtenirAbonnes(), Times.Once);
-        mockDepot.Verify(d => d.ObtenirAbonne(TestAbonne.AbonneId), Times.Once);
-        mockDepot.Verify(d => d.AjouterAbonne(TestAbonne), Times.Once);
+        mockDepot.Verify(d2 => d2.ObtenirAbonnes(), Times.Once);
+        mockDepot.Verify(d3 => d3.AjouterAbonne(TestAbonne), Times.Once);
         mockDepot.VerifyNoOtherCalls();
     }
 
@@ -51,15 +50,14 @@ public class TestConsoliderDonneesDestination
         Mock<IDepotImportationAbonnes> mockImpot = new Mock<IDepotImportationAbonnes>();
         Abonne TestAbonne = new Abonne();
         List<Abonne> mockList = new List<Abonne>();
-       
         mockList.Add(TestAbonne);
-        mockDepot.Setup(d => d.ObtenirAbonnes()).Returns(mockList);
 
+        mockDepot.Setup(d1 => d1.ObtenirAbonnes()).Returns(mockList);
         TraitementLotsConsolidationAbonnes traitement = new TraitementLotsConsolidationAbonnes(mockImpot.Object, mockDepot.Object);
         traitement.ConsoliderDonneesDestination();
 
-        mockDepot.Verify(d => d.ObtenirAbonnes(), Times.Once);
-        mockDepot.Verify(d => d.DesactiverAbonne(TestAbonne.AbonneId), Times.Once);
+        mockDepot.Verify(d2 => d2.ObtenirAbonnes(), Times.Once);
+        mockDepot.Verify(d3 => d3.DesactiverAbonne(TestAbonne.AbonneId), Times.Once);
         mockDepot.VerifyNoOtherCalls();
     }
 
@@ -73,29 +71,28 @@ public class TestConsoliderDonneesDestination
         Abonne TestAbonne2 = new Abonne();
         List<Abonne> mockList = new List<Abonne>();
         List<Abonne> mockList2 = new List<Abonne>();
-
         TestAbonne.AbonneId = 1;
         TestAbonne.Nom = "Alain";
         TestAbonne2.AbonneId = 1;
         TestAbonne2.Nom = "Bob";
         mockList.Add(TestAbonne);
         mockList2.Add(TestAbonne2);
+
         mockImpot.Setup(i => i.ObtenirAbonnes()).Returns(mockList);
-        mockDepot.Setup(d => d.ObtenirAbonnes()).Returns(mockList2);
-        mockDepot.Setup(d => d.ObtenirAbonne(TestAbonne.AbonneId)).Returns(TestAbonne2);
+        mockDepot.Setup(d1 => d1.ObtenirAbonnes()).Returns(mockList2);
 
         TraitementLotsConsolidationAbonnes traitement = new TraitementLotsConsolidationAbonnes(mockImpot.Object, mockDepot.Object);
         traitement.ConsoliderDonneesDestination();
 
         mockImpot.Verify(i => i.ObtenirAbonnes(), Times.Once);
-        mockDepot.Verify(d => d.ObtenirAbonne(TestAbonne2.AbonneId), Times.Once);
-        mockDepot.Verify(d => d.MettreAjourAbonne(TestAbonne), Times.Once);
+        mockDepot.Verify(d3 => d3.ObtenirAbonnes(), Times.Once);
+        mockDepot.Verify(d4 => d4.MettreAjourAbonne(TestAbonne), Times.Once);
         mockDepot.VerifyNoOtherCalls();
     }
 
     [Fact]
 
-    public void Test3AbonneUnExistePas1EstEgalEtUnAutrePrenom()
+    public void TestAbonneUnExistePas1EstEgalEtUnAutrePrenom()
     {
         Mock<IDepotAbonnes> mockDepot = new Mock<IDepotAbonnes>();
         Mock<IDepotImportationAbonnes> mockImpot = new Mock<IDepotImportationAbonnes>();
@@ -104,27 +101,25 @@ public class TestConsoliderDonneesDestination
         Abonne TestAbonne3 = new Abonne();
         List<Abonne> mockList = new List<Abonne>();
         List<Abonne> mockList2 = new List<Abonne>();
-
         TestAbonne.AbonneId = 1;
         TestAbonne.Nom = "Alain";
         TestAbonne2.AbonneId = 1;
         TestAbonne2.Nom = "Bob";
         TestAbonne3.AbonneId = 3;
+        
         mockList.Add(TestAbonne);
         mockList.Add(TestAbonne3);
-        mockList2.Add(TestAbonne);
+
         mockList2.Add(TestAbonne2);
+
         mockImpot.Setup(i => i.ObtenirAbonnes()).Returns(mockList);
         mockDepot.Setup(d1 => d1.ObtenirAbonnes()).Returns(mockList2);
-        mockDepot.Setup(d2 => d2.ObtenirAbonne(TestAbonne2.AbonneId)).Returns(TestAbonne);
-        mockDepot.Setup(d3 => d3.ObtenirAbonne(TestAbonne3.AbonneId));
 
         TraitementLotsConsolidationAbonnes traitement = new TraitementLotsConsolidationAbonnes(mockImpot.Object, mockDepot.Object);
         traitement.ConsoliderDonneesDestination();
 
         mockDepot.Verify(d1 => d1.MettreAjourAbonne(TestAbonne), Times.Once);
-        mockDepot.Verify(d2 => d2.ObtenirAbonne(TestAbonne2.AbonneId), Times.Once);
-        mockDepot.Verify(d3 => d3.ObtenirAbonne(TestAbonne3.AbonneId), Times.Once);
+        mockDepot.Verify(d2 => d2.ObtenirAbonnes(), Times.Once);
         mockDepot.Verify(d => d.AjouterAbonne(TestAbonne3), Times.Once);
         mockImpot.Verify(i => i.ObtenirAbonnes(), Times.Once);
         mockDepot.VerifyNoOtherCalls();

@@ -13,35 +13,37 @@ namespace ClassesLib
 
         public void ConsoliderDonneesDestination()
         {
-            bool sansRetour = true;
-            foreach(Abonne a in m_depotSource.ObtenirAbonnes())
+            Dictionary<int, Abonne> importationAbonne = new Dictionary<int, Abonne>();
+            Dictionary<int, Abonne> destinationAbonne = new Dictionary<int, Abonne>();
+
+            foreach(Abonne d in m_depotDestination.ObtenirAbonnes())
             {
-                Abonne resultat = m_depotDestination.ObtenirAbonne(a.AbonneId);
-                if(resultat != null)
+                destinationAbonne.Add(d.AbonneId, d);
+            }
+
+            foreach(Abonne s in m_depotSource.ObtenirAbonnes())
+            {
+                importationAbonne.Add(s.AbonneId, s);
+
+                if(!destinationAbonne.ContainsKey(s.AbonneId))
                 {
-                    if(!resultat.Equals(a))
-                    {   
-                        m_depotDestination.MettreAjourAbonne(a);
-                        sansRetour = false;
-                    }
-                    else
-                    {
-                        m_depotDestination.MettreAjourAbonne(a);
-                        sansRetour = false;
-                    }
+                    m_depotDestination.AjouterAbonne(s);
                 }
-                else
+                if(destinationAbonne.ContainsKey(s.AbonneId))
                 {
-                    m_depotDestination.AjouterAbonne(a);
-                    sansRetour = false;
+                    if(!s.Equals(destinationAbonne[s.AbonneId]))
+                    {
+                        m_depotDestination.MettreAjourAbonne(s);
+                    }
                 }
             }
-            if(sansRetour)
+            
+            foreach(KeyValuePair<int, Abonne> a in destinationAbonne)
             {
-                m_depotDestination.ObtenirAbonnes()
-                    .Where(d => !m_depotSource.ObtenirAbonnes().Contains(d))
-                    .ToList()
-                    .ForEach(d => m_depotDestination.DesactiverAbonne(d.AbonneId)); 
+                if(!importationAbonne.ContainsKey(a.Key))
+                {
+                    m_depotDestination.DesactiverAbonne(a.Value.AbonneId);
+                }
             }
         }
     }
